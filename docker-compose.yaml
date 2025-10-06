@@ -1,0 +1,46 @@
+services:
+  app:
+    build: .
+    container_name: noveats_app
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=noveats_db
+      - DB_SSL_MODE=disable
+      - SERVER_PORT=8080
+      - SERVER_HOST=0.0.0.0
+      - LOG_LEVEL=debug
+    depends_on:
+      - postgres
+    networks:
+      - noveats_network
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: noveats_postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=noveats_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - noveats_network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+
+networks:
+  noveats_network:
+    driver: bridge
