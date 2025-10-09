@@ -10,6 +10,7 @@ type UserResponse struct {
 	Name      string `json:"name"`
 	Email     string `json:"email"`
 	CreatedAt string `json:"created_at"`
+	UpdatedAt string `json:"updated_at"`
 }
 
 func ToUserResponse(user *entity.User) *UserResponse {
@@ -18,6 +19,7 @@ func ToUserResponse(user *entity.User) *UserResponse {
 		Name:      user.Name,
 		Email:     user.Email,
 		CreatedAt: user.CreatedAt.Format(time.RFC3339),
+		UpdatedAt: user.CreatedAt.Format(time.RFC3339),
 	}
 }
 

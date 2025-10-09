@@ -10,6 +10,7 @@ import (
 	"noveats-be/internal/infrastructure/database"
 	"noveats-be/internal/infrastructure/logger"
 	"noveats-be/internal/repository/postgres"
+	"noveats-be/internal/usecase/menu"
 	"noveats-be/internal/usecase/user"
 
 	"go.uber.org/zap"
@@ -47,12 +48,17 @@ func main() {
 
 	// Initialize repositories
 	userRepository := postgres.NewUserRepository(db)
+	menuRepository := postgres.NewMenuRepository(db)
 
 	// Initialize use cases
 	createUserUC := user.NewCreateUserUseCase(userRepository)
 	getUserUC := user.NewGetUserUseCase(userRepository)
 	updateUserUC := user.NewUpdateUserUseCase(userRepository)
 	deleteUserUC := user.NewDeleteUserUseCase(userRepository)
+	createMenuUC := menu.NewCreateMenuUseCase(menuRepository)
+	getMenuUC := menu.NewGetMenuUseCase(menuRepository)
+	updateMenuUC := menu.NewUpdateMenuUseCase(menuRepository)
+	deleteMenuUC := menu.NewDeleteMenuUseCase(menuRepository)
 
 	// Initialize handlers
 	userHandler := handler.NewUserHandler(
@@ -62,9 +68,16 @@ func main() {
 		deleteUserUC,
 		zapLogger,
 	)
+	menuHandler := handler.NewMenuHandler(
+		createMenuUC,
+		getMenuUC,
+		updateMenuUC,
+		deleteMenuUC,
+		zapLogger,
+	)
 
 	// Setup router
-	router := http.NewRouter(userHandler, zapLogger)
+	router := http.NewRouter(userHandler, menuHandler, zapLogger)
 
 	// Start server
 	address := fmt.Sprintf("%s:%s", cfg.Server.Host, cfg.Server.Port)

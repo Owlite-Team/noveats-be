@@ -63,7 +63,7 @@ func (h *UserHandler) GetAllUser(c *gin.Context) {
 	}
 
 	res := dto.ToUserResponseList(u)
-	response.Success(c, http.StatusOK, "Users retrieve successfully", res)
+	response.Success(c, http.StatusOK, "Users retrieved successfully", res)
 }
 
 func (h *UserHandler) GetUser(c *gin.Context) {

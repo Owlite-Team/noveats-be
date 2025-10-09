@@ -47,13 +47,3 @@ func (uc *CreateUserUseCase) Execute(email, name, password string) (*entity.User
 
 	return user, nil
 }
-
-// ExecuteAll retrieves all users and returns the domain entity
-func (uc *CreateUserUseCase) ExecuteAll() ([]*entity.User, error) {
-	users, err := uc.userRepository.FindAll()
-	if err != nil {
-		return nil, err
-	}
-
-	return users, nil
-}

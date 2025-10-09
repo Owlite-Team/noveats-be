@@ -8,7 +8,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func NewRouter(userHandler *handler.UserHandler, logger *zap.Logger) *gin.Engine {
+func NewRouter(userHandler *handler.UserHandler, menuHandler *handler.MenuHandler, logger *zap.Logger) *gin.Engine {
 	router := gin.Default()
 
 	// Middleware
@@ -30,6 +30,15 @@ func NewRouter(userHandler *handler.UserHandler, logger *zap.Logger) *gin.Engine
 			users.GET("/:id", userHandler.GetUser)
 			users.PUT("/:id", userHandler.UpdateUser)
 			users.DELETE("/:id", userHandler.DeleteUser)
+		}
+
+		menus := v1.Group("/menus")
+		{
+			// menus.POST("", menuHandler.CreateMenu)
+			menus.GET("", menuHandler.GetAllMenu)
+			menus.GET("/:id", menuHandler.GetMenu)
+			// menus.PUT("/:id", menuHandler.UpdateMenu)
+			// menus.DELETE("/:id", menuHandler.DeleteMenu)
 		}
 	}
 
